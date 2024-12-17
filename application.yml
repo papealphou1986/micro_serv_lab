@@ -1,0 +1,34 @@
+spring:
+  cloud:
+    discovery:
+      enabled: true
+  config:
+    enabled: true
+    import: optional:configserver:${ENV_CONFIG_SERVICE_URL}
+  instance:
+    prefer-ip-address: true
+  client:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    registry-fetch-interval: 5
+
+#Eureka settings
+# Threshold for peer accessibility (relevant for multi-peer Eureka setups)
+eureka:
+  server:
+    peer-availability-threshold: 1
+    # Interval to check for expired instances
+    eviction-interval-timer-in-ms: 60000
+    # Disable self-preservation to force quicker expiration of unresponsive instances
+    enable-self-preservation: false
+  instance:
+    prefer-ip-address: true
+    client:
+      service-url:
+        defaultZone: ${ENV_DISCOVERY_SERVICE_URL}:http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,metrics,env,trace,cache
